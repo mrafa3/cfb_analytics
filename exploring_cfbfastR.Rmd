@@ -1,0 +1,21 @@
+---
+title: "Exploring cfbfastR package"
+output: html_notebook
+---
+
+```{r libraries, include=TRUE}
+library(tidyverse)
+library(gt)
+library(cfbfastR)
+
+# You can install using the pacman package using the following code:
+# if (!requireNamespace('pacman', quietly = TRUE)){
+#   install.packages('pacman')
+# }
+# pacman::p_load_current_gh("sportsdataverse/cfbfastR", dependencies = TRUE, update = TRUE)
+```
+
+```{r}
+
+```
+
