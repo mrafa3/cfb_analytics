@@ -33,3 +33,46 @@ wvu_pbp_2024 %>%
   names()
 ```
 
+
+
+```{r}
+coaches <- cfbfastR::cfbd_coaches()
+
+wv_coaches <- cfbfastR::cfbd_coaches() %>% 
+  filter(school == 'West Virginia')
+
+coaches %>% 
+  filter(first_name == 'Rich' & last_name == 'Rodriguez')
+```
+
+```{r}
+wv_coaches %>% 
+  mutate(name = paste(first_name, last_name, sep=' ')) %>% 
+  group_by(name) %>% 
+  summarise(across(c('wins', 'losses', 'ties'),
+                   list(
+                     sum = ~sum(., na.rm = TRUE)
+                   ),
+                   .names = "{.fn}_{.col}"
+                   ),
+            seasons = n_distinct(year),
+            .groups = 'drop') %>% 
+  mutate(avg_wins_per_season = round(sum_wins / seasons, 1)) %>% 
+  arrange(-sum_wins)
+```
+
+```{r}
+wv_season_stats <- cfbfastR::cfbd_stats_season_advanced(year = 2002, team = 'West Virginia')
+# test <- cfbfastR::espn_cfb_team_stats(year = 2007, team_id = 277)
+cfbfastR::cfbd_stats_season_team()
+seasons <- 2001:2024
+
+get_wv_stats <- function(season){
+  cfbd_stats_season_team(year = season, team = 'West Virginia') %>% 
+    mutate(season = season) %>% 
+    select(season, everything())
+}
+
+wv_stats_2001_24 <- map_df(seasons, get_wv_stats)
+```
+
