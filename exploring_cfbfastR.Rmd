@@ -56,6 +56,9 @@ wv_coaches %>%
                    .names = "{.fn}_{.col}"
                    ),
             seasons = n_distinct(year),
+            max_wins = max(wins), 
+            first_season = min(year),
+            last_season = max(year),
             .groups = 'drop') %>% 
   mutate(avg_wins_per_season = round(sum_wins / seasons, 1)) %>% 
   arrange(-sum_wins)
