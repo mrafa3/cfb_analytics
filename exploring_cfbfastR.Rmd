@@ -42,6 +42,26 @@ wv_coaches <- cfbfastR::cfbd_coaches() %>%
   filter(school == 'West Virginia')
 
 coaches %>% 
+  mutate(name = paste(first_name, last_name, sep=' ')) %>% 
+  filter(year >= 2001) %>% 
+  group_by(name) %>% 
+  summarise(across(c('wins', 'losses', 'ties'),
+                   list(
+                     sum = ~sum(., na.rm = TRUE)
+                   ),
+                   .names = "{.fn}_{.col}"
+                   ),
+            seasons = n_distinct(year),
+            max_wins = max(wins), 
+            min_wins = min(wins), 
+            first_season = min(year),
+            last_season = max(year),
+            .groups = 'drop') %>% 
+  mutate(avg_wins_per_season = round(sum_wins / seasons, 1),
+         rank_wins = rank(-sum_wins),
+         win_perc = sum_wins / (sum_wins + sum_losses + sum_ties)) %>% 
+  arrange(-win_perc) %>% 
+  select(name, rank_wins, everything())
   filter(first_name == 'Rich' & last_name == 'Rodriguez')
 ```
 
