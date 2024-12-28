@@ -86,13 +86,17 @@ wv_coaches %>%
 
 ```{r}
 wv_season_stats <- cfbfastR::cfbd_stats_season_advanced(year = 2002, team = 'West Virginia')
-# test <- cfbfastR::espn_cfb_team_stats(year = 2007, team_id = 277)
-cfbfastR::cfbd_stats_season_team()
+```
+
+
+```{r get_wv_season_stats, include=TRUE}
 seasons <- 2001:2024
 
 get_wv_stats <- function(season){
   cfbd_stats_season_team(year = season, team = 'West Virginia') %>% 
+    # adds the season as a column to the dataframe
     mutate(season = season) %>% 
+    # moves the season column to the first position, then selects every other column in order
     select(season, everything())
 }
 
