@@ -97,9 +97,16 @@ get_wv_stats <- function(season){
     # adds the season as a column to the dataframe
     mutate(season = season) %>% 
     # moves the season column to the first position, then selects every other column in order
+    # could also use relocate() but I prefer select()
     select(season, everything())
 }
 
 wv_stats_2001_24 <- map_df(seasons, get_wv_stats)
 ```
+
+```{r}
+wv_stats_2001_24 %>% 
+  relocate(team)
+```
+
 
