@@ -16,23 +16,31 @@ library(cfbfastR)
 ```
 
 ```{r}
-wvu_pbp_2024 <- cfbfastR::cfbd_pbp_data(year = 2024,
+wvu_pbp_2025 <- cfbfastR::cfbd_pbp_data(year = 2025,
                                         season_type = 'regular',
-                                        week = 8,
+                                        week = 3,
                                         team = 'West Virginia',
                                         epa_wpa = TRUE)
 ```
 
 ```{r}
-wvu_pbp_2024 %>% 
-  # select(contains('wp'))
+wvu_pbp_2025 %>% 
   select(play_text, EPA, wpa) %>% 
   filter(wpa > .05 & wpa < .95) %>% 
   top_n(10, abs(EPA)) %>% 
   arrange(-abs(EPA))
-  names()
 ```
 
+
+```{r}
+wvu_pbp_2025 %>% 
+  select(contains('type'))
+  group_by(pos_team, )
+```
+
+
+
+## Coaches 
 
 
 ```{r}
@@ -108,5 +116,6 @@ wv_stats_2001_24 <- map_df(seasons, get_wv_stats)
 wv_stats_2001_24 %>% 
   relocate(team)
 ```
+
 
 
