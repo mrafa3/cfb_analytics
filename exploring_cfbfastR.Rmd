@@ -32,17 +32,41 @@ wvu_pbp_2025 %>%
   arrange(-abs(epa))
 ```
 
+```{r}
+wvu_pbp_2025 %>% 
+  distinct(play_type)
+```
 
 ```{r}
 wvu_pbp_2025 %>% 
-  filter(!play_type %in% c('End Period', 'End of Regulation', 'End of Game', 'End of Half', 'Timeout')) %>% 
+  arrange(game_play_number)
+  filter(play_type == 'Interception Return')
+```
+
+
+
+```{r}
+wvu_pbp_2025 <- wvu_pbp_2025 %>%
+  mutate(play_type_agg = case_when(
+    play_type %in%  c('Pass Incompletion', 'Pass Reception', 'Sack', 
+                      'Interception Return', 'Passing Touchdown') ~ "pass",
+    play_type %in% c('Rush', 'Rushing Touchdown') ~ "rush",
+    TRUE ~ 'other'   # fallback/default
+  )) %>% 
+  select(play_type, play_type_agg, everything())
+```
+
+
+
+```{r}
+wvu_pbp_2025 %>% 
   # filter(play_type == 'Punt')
   # distinct(play_type)
   # select(contains('epa'))
-  group_by(pos_team, play_type) %>% 
+  group_by(pos_team, play_type_agg) %>% 
   summarise(success_rate = mean(success, na.rm = TRUE),
             epa_success_rate = mean(epa_success, na.rm = TRUE),
-            epa = mean(epa, na.rm = TRUE))
+            epa_per_play = mean(epa, na.rm = TRUE))
 ```
 
 
