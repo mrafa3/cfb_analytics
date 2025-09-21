@@ -20,22 +20,29 @@ wvu_pbp_2025 <- cfbfastR::cfbd_pbp_data(year = 2025,
                                         season_type = 'regular',
                                         week = 3,
                                         team = 'West Virginia',
-                                        epa_wpa = TRUE)
+                                        epa_wpa = TRUE) %>% 
+  janitor::clean_names()
 ```
 
 ```{r}
 wvu_pbp_2025 %>% 
-  select(play_text, EPA, wpa) %>% 
+  select(play_text, epa, wpa) %>% 
   filter(wpa > .05 & wpa < .95) %>% 
-  top_n(10, abs(EPA)) %>% 
-  arrange(-abs(EPA))
+  top_n(10, abs(epa)) %>% 
+  arrange(-abs(epa))
 ```
 
 
 ```{r}
 wvu_pbp_2025 %>% 
-  select(contains('type'))
-  group_by(pos_team, )
+  filter(!play_type %in% c('End Period', 'End of Regulation', 'End of Game', 'End of Half', 'Timeout')) %>% 
+  # filter(play_type == 'Punt')
+  # distinct(play_type)
+  # select(contains('epa'))
+  group_by(pos_team, play_type) %>% 
+  summarise(success_rate = mean(success, na.rm = TRUE),
+            epa_success_rate = mean(epa_success, na.rm = TRUE),
+            epa = mean(epa, na.rm = TRUE))
 ```
 
 
